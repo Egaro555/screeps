@@ -1,0 +1,3 @@
+interface CreepMemory {
+  tasks?: string[];
+}
