@@ -114,7 +114,7 @@ if (__REVISION__) {
 export function loop() {
   if (!PRODUCTION) {
     // will only be included in development mode
-    devLogger.log('loop started')
+    devLogger.log(infinity)
   }
 }
 ```

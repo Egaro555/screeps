@@ -7,9 +7,12 @@ export interface EnergieTaskCreep extends CreepTask{
   mName: 'EMCC';
   step?: number;
   from: Position;
+  fromId: string;
   to: Position;
+  toId: string;
   qte?: number;
-  loop?: boolean;
+  infinity?: boolean;
+  qteCharged?: number;
 }
 
 export interface EnergieTask extends Task{
@@ -29,8 +32,16 @@ export namespace EnergieManager {
   export const data: EnergieManagerData = Memory.EnergieManager || {};
 
   function manageEMCC(task: EnergieTaskCreep, creep: Creep): ManageCode {
-
+    let targetQte;
     switch (task.step) {
+      case undefined:
+        targetQte = task.qte || creep.carryCapacity;
+        if(targetQte <= creep.carry.energy){
+          task.step = 2;
+          task.qteCharged = creep.carry.energy;
+          return "WIP";
+        }
+        task.step = 0;
       case 0:
         if(!(creep.room.getPositionAt(task.from.x, task.from.y) as RoomPosition).isNearTo(creep)){
           creep.moveTo(task.from.x, task.from.y);
@@ -38,13 +49,14 @@ export namespace EnergieManager {
         }
         task.step = 1;
       case 1:
-        let targetQte = task.qte || creep.carryCapacity;
+        targetQte = task.qte || creep.carryCapacity;
         if(creep.carry.energy < targetQte){
-          const source = creep.room.find(FIND_SOURCES).filter(source => source.pos.x === task.from.x && source.pos.y === task.from.y)[0];
+          const source = Game.getObjectById(task.fromId) as Source;
           creep.harvest(source);
           return "WIP";
         }
         task.step = 2;
+        task.qteCharged = creep.carry.energy;
       case 2:
         if(!(creep.room.getPositionAt(task.to.x, task.to.y) as RoomPosition).isNearTo(creep)){
           creep.moveTo(task.to.x, task.to.y);
@@ -52,10 +64,20 @@ export namespace EnergieManager {
         }
         task.step = 3;
       case 3:
-        const structure = creep.room.find(FIND_MY_STRUCTURES).filter(source => source.pos.x === task.from.x && source.pos.y === task.from.y)[0];
-        if(creep.transfer(structure, "energy", task.qte))return 'ERROR';
+        const target = Game.getObjectById(task.toId) as Structure|Creep;
+        targetQte = task.qte || creep.carryCapacity;
+        while(task.qteCharged as number - creep.carry.energy < targetQte){
+          let err = creep.transfer(target, RESOURCE_ENERGY, targetQte - (task.qteCharged as number) + creep.carry.energy);
+          if(err === -8) err = creep.transfer(target, RESOURCE_ENERGY);
+          if(err === -8) return "WIP";
+          if(err){
+            console.log('ERROR', err);
+            return 'ERROR';
+          }
+          return 'WIP';
+        }
         task.step = 4;
-        if(task.loop){
+        if(task.infinity){
           task.step = 0;
         }
         return "WIP";
@@ -70,6 +92,7 @@ export namespace EnergieManager {
   }
 
   export function init() {
+
     Manager.addManager("EMCC", manageEMCC as any);
 
   }
