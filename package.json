@@ -16,6 +16,7 @@
     "watch-sim": "rollup -cw --environment DEST:sim",
     "git:add": "git add .",
     "commitOK": "git commit -m auto:[SUCCESS]Commit",
+    "commitWIP": "git commit -m auto:[WIP]Commit",
     "commitKO": "git commit -m auto:[FAIL]Commit",
     "commitVersion": "git commit -m auto:[VERSSION]Commit"
   },
