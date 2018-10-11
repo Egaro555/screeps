@@ -1,3 +1,5 @@
+import {Position} from "../Position";
+
 const allowedChar = "azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN1234567890_-";
 
 const roomsTerrain: {[roomName: string]:RoomTerrain} = {};
@@ -24,4 +26,8 @@ export function forEach<T>(object: {[key: string]: T}, callback: (key:string, va
       callback(prop, object[prop]);
     }
   }
+}
+
+export function dist(pos1: Position, pos2: Position) {
+  return Math.max(Math.abs(pos1.x-pos2.x), Math.abs(pos1.y-pos2.y));
 }

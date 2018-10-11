@@ -1,9 +1,10 @@
 import {idIntToString} from "./utils/Utils";
 import {Managable} from "./Manager";
-export type TaskStatus = 'WIP' | 'ERROR' | 'WAIT' | 'FINISHED';
+export type TaskStatus = 'INIT' | 'WIP' | 'ERROR' | 'WAIT' | 'FINISH' | 'WAIT_CHILDREN';
 
 export interface Task extends Managable{
   id : string;
+  status: TaskStatus
   parentId?: string;
   childrenId?: string[];
 }
@@ -26,6 +27,7 @@ export namespace TaskManager{
   }
 
   export function save(task: Task) {
+    console.log("save", task.id);
     Memory.TaskManager.tasks[task.id] = task;
   }
 

@@ -1,4 +1,6 @@
-export type ManageCode = 'ERROR' | 'WIP' | 'FINISH';
+import {TaskStatus} from "./Task";
+
+export type ManageCode = TaskStatus;
 
 const managers: {[key: string]: (managable: Managable, ...params: any[]) => ManageCode } = {};
 
