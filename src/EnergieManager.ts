@@ -95,10 +95,12 @@ export namespace EnergieManager {
       case 3:
         const target = Game.getObjectById(task.toId) as Structure | Creep;
         targetQte = task.qte || creep.carryCapacity;
-        while (task.qteCharged as number - creep.carry.energy < targetQte) {
+        if (task.qteCharged as number - creep.carry.energy < targetQte) {
           let err = creep.transfer(target, RESOURCE_ENERGY, targetQte - (task.qteCharged as number) + creep.carry.energy);
           if (err === -8) err = creep.transfer(target, RESOURCE_ENERGY);
-          if (err === -8) return task.status = "WIP";
+          if (err === -8) {
+            return task.status = "WIP";
+          }
           if (err) {
             console.log('ERROR', err);
             return task.status = 'ERROR';

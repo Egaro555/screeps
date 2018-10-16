@@ -1,13 +1,20 @@
 import {forEach} from "./utils/Utils";
 import {Task} from "./Task";
+type CST_INIT = 1;
+type CreateScreepTaskStep = CST_INIT;
 
 export interface CreateScreepTask extends Task{
   mName: 'CST',
-
+  cost: number,
+  step: CreateScreepTaskStep,
+  name: string,
+  body: string,
+  priority: number,
 }
 
 export interface SpawnRoomManagerData {
   tasks: string[];
+  currentTask ?: string;
 }
 
 export interface SpawnManagerData {
@@ -23,4 +30,9 @@ export namespace SpawnManager {
       if(!data.rooms[spawnName])data.rooms[spawnName] = {tasks: []}
     })
   }
+
+  function manageCST(task: CreateScreepTask){
+
+  }
+
 }
