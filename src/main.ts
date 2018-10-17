@@ -1,9 +1,11 @@
 import { ErrorMapper } from 'utils/ErrorMapper';
 import { BuildManager } from './BuidManager';
 import { EnergieManager, EnergieTaskCreep } from './EnergieManager';
+import { ExtractManager } from './ExtractManager';
 import { EMCC, ManageCode, Manager } from './Manager';
 import { Position } from './Position';
 import { TaskManager } from './Task';
+import { TransferManager } from './TransferManager';
 import { forEach } from './utils/Utils';
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -17,7 +19,7 @@ const posSpawner: Position[] = [
 const posSource1: Position[] = [
 	{x: 17, y: 17},
 	{x: 18, y: 17},
-	{x:19, y:17},
+	{x: 19, y: 17}
 ];
 
 const posControler: Position[] = [
@@ -38,6 +40,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
 	// console.log(`Current game tick is ${Game.time}`);
 
 	EnergieManager.init();
+	ExtractManager.init();
+	TransferManager.init();
 	BuildManager.init();
 
 	const source1 = Game.getObjectById('59f1a2ba82100e1594f3a80b') as Source;

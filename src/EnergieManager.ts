@@ -85,7 +85,7 @@ export namespace EnergieManager {
 				task.step = 0;
 			case 0:
 				if (dist(task.from, creep.pos) > task.fromDist) {
-					creep.moveTo(task.from.x, task.from.y);
+					if (!creep.fatigue) creep.moveTo(task.from.x, task.from.y);
 					return task.status = 'WIP';
 				}
 				task.step = 1;
@@ -100,7 +100,7 @@ export namespace EnergieManager {
 				task.qteCharged = creep.carry.energy;
 			case 2:
 				if (dist(task.to, creep.pos) > task.toDist) {
-					creep.moveTo(task.to.x, task.to.y);
+					if (!creep.fatigue) creep.moveTo(task.to.x, task.to.y);
 					return task.status = 'WIP';
 				}
 				task.step = 3;
@@ -110,6 +110,7 @@ export namespace EnergieManager {
 				if (task.qteCharged as number - creep.carry.energy < targetQte) {
 					let err = creep.transfer(target, RESOURCE_ENERGY, targetQte - (task.qteCharged as number) + creep.carry.energy);
 					if (err === -8) {
+						console.log('Test');
 						err = creep.transfer(target, RESOURCE_ENERGY);
 					}
 					if (err === -8) {
