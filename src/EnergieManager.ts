@@ -4,6 +4,20 @@ import {CreepTask, Task, TaskManager} from "./Task";
 import {Position} from "./Position";
 import {dist} from "./utils/Utils";
 
+export interface ExtractTaskCreep extends CreepTask {
+  fromDist: number;
+  toDist: number;
+  mName: 'EMCC';
+  step?: number;
+  from: Position;
+  fromId: string;
+  to: Position;
+  toId: string;
+  qte?: number;
+  infinity?: boolean;
+  qteCharged?: number;
+}
+
 export interface EnergieTaskCreep extends CreepTask {
   fromDist: number;
   toDist: number;

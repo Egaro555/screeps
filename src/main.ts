@@ -107,7 +107,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
               Memory.creeps[creep.name].inRefule = false;
               freeCreeps.push(creep);
             } else {
-              creep.moveTo(13, 20);
+              creep.moveTo(12, 20);
             }
           }
 
